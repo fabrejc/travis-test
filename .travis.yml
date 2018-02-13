@@ -45,14 +45,14 @@ before_script:
   - echo "SET(OFBUILD_TESTS_GITHELPER_AUTH_URL \"\")" >> CMake.in.local.cmake
   - mkdir _build
   - cd _build
-  - if [ ${OFBUILD_TRAVIS_BUILDTYPE} == "debug" ] ; then cmake .. -DOPENFLUID_ENABLE_HEAVYTESTING=1 ; fi
-  - if [ ${OFBUILD_TRAVIS_BUILDTYPE} == "release" ] ; then cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ; fi
-  - if [ ${TRAVIS_OS_NAME} == 'osx' ] ; then brew install qt rapidjson doxygen ; fi
+  - if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "debug" ] ; then cmake .. -DOPENFLUID_ENABLE_HEAVYTESTING=1 ; fi
+  - if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "release" ] ; then cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ; fi
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ] ; then brew install qt rapidjson doxygen ; fi
 
 script:
-  - if [ ${OFBUILD_TRAVIS_BUILDTYPE} == "debug" ] ; then make && ctest --output-on-failure ; fi
-  - if [ ${OFBUILD_TRAVIS_BUILDTYPE} == "release" ] ; then make && cpack ; fi
-  - if [ ${TRAVIS_OS_NAME} == 'osx' ] ; make && cmake -P ofpack-osx-brewcask.cmake ; fi
+  - if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "debug" ] ; then make && ctest --output-on-failure ; fi
+  - if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "release" ] ; then make && cpack ; fi
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ] ; make && cmake -P ofpack-osx-brewcask.cmake ; fi
 
 
 notifications:
