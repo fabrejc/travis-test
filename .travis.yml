@@ -73,11 +73,11 @@ before_script:
         cmake .. -DOPENFLUID_ENABLE_HEAVYTESTING=1
       elif [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "release" ]
       then
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ; fi
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
       fi
     elif [ "${TRAVIS_OS_NAME}" == "osx" ]
     then 
-      cmake .. -DCMAKE_PREFIX_PATH=$(brew --prefix qt5)/lib/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ; fi 
+      cmake .. -DCMAKE_PREFIX_PATH=$(brew --prefix qt5)/lib/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local 
     fi  
  
  
