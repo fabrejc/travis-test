@@ -13,7 +13,14 @@ matrix:
       env: OFBUILD_TRAVIS_BUILDTYPE=release
     - os: osx
       osx_image: xcode9.2
-      env: PATH=$PATH:/usr/local/Cellar/qt/5.10.0_1/bin/
+      env: OFBUILD_TRAVIS_BUILDTYPE=release
+
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
+
 
 addons:
   apt:
@@ -39,8 +46,17 @@ addons:
     - graphviz
 
 
+#####################################################
+
+
 install:
-  - if [ "${TRAVIS_OS_NAME}" == "osx" ] ; then brew install qt rapidjson doxygen ; fi
+  - |
+    if [ "${TRAVIS_OS_NAME}" == "osx" ]
+    then 
+      brew install qt rapidjson doxygen
+      export PATH=$PATH:$(brew --prefix qt5)/bin
+    fi
+
 
 before_script:
   - echo "SET(OPENFLUID_ENABLE_MARKET 1)" > CMake.in.local.cmake
@@ -49,18 +65,34 @@ before_script:
   - echo "SET(OFBUILD_TESTS_GITHELPER_AUTH_URL \"\")" >> CMake.in.local.cmake
   - mkdir _build
   - cd _build
-  - if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "debug" ] ; then cmake .. -DOPENFLUID_ENABLE_HEAVYTESTING=1 ; fi
-  - if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "release" ] ; then cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ; fi
-  - if [ "${TRAVIS_OS_NAME}" == "osx" ] ; then cmake .. -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.10.0_1/lib/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ; fi 
-  
+  - |
+    if [ "${TRAVIS_OS_NAME}" == "linux" ]
+    then
+      if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "debug" ]
+      then 
+        cmake .. -DOPENFLUID_ENABLE_HEAVYTESTING=1
+      elif [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "release" ]
+      then
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ; fi
+      fi
+    elif [ "${TRAVIS_OS_NAME}" == "osx" ]
+    then 
+      cmake .. -DCMAKE_PREFIX_PATH=$(brew --prefix qt5)/lib/cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ; fi 
+    fi  
+ 
+ 
 script:
-  - if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "debug" ] ; then make && ctest --output-on-failure ; fi
-  - if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "release" ] ; then make && cpack ; fi  
-  - if [ "${TRAVIS_OS_NAME}" == "osx" ] ; then make && cmake -P ofpack-osx-brewcask.cmake ; fi
-
-
-notifications:
-  email:
-    on_success: always
-    on_failure: always
-
+  - |
+    if [ "${TRAVIS_OS_NAME}" == "linux" ]
+    then
+      if [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "debug" ]
+      then 
+        make && ctest --output-on-failure
+      elif [ "${OFBUILD_TRAVIS_BUILDTYPE}" == "release" ]
+      then 
+        make && cpack
+      fi
+    elif [ "${TRAVIS_OS_NAME}" == "osx" ]
+    then 
+      make && cmake -P ofpack-osx-brewcask.cmake
+    fi
