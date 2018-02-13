@@ -47,7 +47,7 @@ before_script:
   - cd _build
   - if [ ${OFBUILD_TRAVIS_BUILDTYPE} == "debug" ] ; then cmake .. -DOPENFLUID_ENABLE_HEAVYTESTING=1 ; fi
   - if [ ${OFBUILD_TRAVIS_BUILDTYPE} == "release" ] ; then cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ; fi
-  - if [ ${TRAVIS_OS_NAME} == 'osx' ] ; then brew install qt boost rapidjson doxygen ; fi
+  - if [ ${TRAVIS_OS_NAME} == 'osx' ] ; then brew install qt rapidjson doxygen ; fi
 
 script:
   - if [ ${OFBUILD_TRAVIS_BUILDTYPE} == "debug" ] ; then make && ctest --output-on-failure ; fi
