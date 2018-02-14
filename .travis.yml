@@ -53,7 +53,7 @@ install:
   - |
     if [ "${TRAVIS_OS_NAME}" == "osx" ]
     then 
-      brew install qt rapidjson doxygen
+      brew install qt5 rapidjson doxygen
       export PATH=$PATH:$(brew --prefix qt5)/bin
     fi
 
