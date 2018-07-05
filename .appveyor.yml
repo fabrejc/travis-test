@@ -21,15 +21,12 @@ before_build:
   - cmd: set PATH=%PATH:C:\Program Files\Git\usr\bin;=%  
   # Use MinGW from Qt tools instead of default installation
   - cmd: set PATH=%PATH:C:\MinGW\bin;=% 
-  - cmd: set PATH=C:\Qt\Tools\mingw491_32\bin;C:\Qt\5.4\mingw491_32\bin;%PATH%
+  - cmd: set PATH=C:\Qt\Tools\mingw53_32\bin;C:\Qt\5.11.0\mingw53_32\bin;%PATH%
   - cmd: cmake .. -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\OpenFLUID-buildsupport -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.
+  - cmd: more CMakeFiles/CMakeOutput.log
+  - cmd: more CMakeFiles/CMakeError.log
 
   
 build_script:
   - cmd: cd C:\projects\openfluid\_build-release
   - cmd: mingw32-make -j 2
-
-artifacts:
-  - path: _build-release
-    name: build
-    type: zip
