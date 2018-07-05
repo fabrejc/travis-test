@@ -29,3 +29,7 @@ build_script:
   - cmd: cd C:\projects\openfluid\_build-release
   - cmd: mingw32-make -j 2
 
+artifacts:
+  - path: _build-release
+    name: build
+    type: zip
